@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.2.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RecruitmentTask.Application\RecruitmentTask.Application.csproj" />
+    <ProjectReference Include="..\RecruitmentTask.Infrastructure\RecruitmentTask.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
