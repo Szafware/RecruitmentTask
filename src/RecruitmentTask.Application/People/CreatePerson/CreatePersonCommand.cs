@@ -3,7 +3,13 @@ using System;
 
 namespace RecruitmentTask.Application.People.CreatePerson;
 
-// TODO: Fill up Person properties
 public record CreatePersonCommand(
     string FirstName,
-    string LastName) : ICommand<Guid>;
+    string LastName,
+    DateOnly BirthDate,
+    string PhoneNumber,
+    string StreetName,
+    string HouseNumber,
+    int? ApartmentNumber,
+    string Town,
+    string PostalCode) : ICommand<Guid>;

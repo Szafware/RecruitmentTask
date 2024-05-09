@@ -26,14 +26,17 @@ internal sealed class CreatePersonCommandHandler : ICommandHandler<CreatePersonC
 
     public async Task<Result<Guid>> Handle(CreatePersonCommand request, CancellationToken cancellationToken)
     {
-        var nowUtc = _dateTimeProvider.UtcNow;
+        var utcNow = _dateTimeProvider.UtcNow;
 
-        var person = Person.CreateNew(nowUtc);
+        var personalData = new PersonalData(request.FirstName, request.LastName, request.BirthDate, request.PhoneNumber);
+        var address = new Address(request.StreetName, request.HouseNumber, request.ApartmentNumber, request.Town, request.PostalCode);
+
+        var person = Person.CreateNew(utcNow, personalData, address, DateOnly.FromDateTime(utcNow));
 
         _personRepository.Add(person);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return Result.Success(person.Id);
+        return person.Id;
     }
 }
