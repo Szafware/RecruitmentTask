@@ -12,7 +12,27 @@ internal class UserConfiguration : IEntityTypeConfiguration<Person>
 
         builder.HasKey(person => person.Id);
 
-        builder.ComplexProperty(person => person.PersonalData);
-        builder.ComplexProperty(person => person.Address);
+        builder.ComplexProperty(
+            person => person.PersonalData,
+            personalData =>
+            {
+                personalData.IsRequired();
+                personalData.Property(personalData => personalData.FirstName).IsRequired().HasMaxLength(15);
+                personalData.Property(personalData => personalData.LastName).IsRequired().HasMaxLength(20);
+                personalData.Property(personalData => personalData.BirthDateUtc);
+                personalData.Property(personalData => personalData.PhoneNumber).IsRequired().HasMaxLength(9);
+            });
+
+        builder.ComplexProperty(
+            person => person.Address,
+            address =>
+            {
+                address.IsRequired();
+                address.Property(address => address.StreetName).IsRequired().HasMaxLength(20);
+                address.Property(address => address.HouseNumber).IsRequired().HasMaxLength(6);
+                address.Property(address => address.ApartmentNumber);
+                address.Property(address => address.Town).IsRequired().HasMaxLength(20);
+                address.Property(address => address.PostalCode).IsRequired().HasMaxLength(6);
+            });
     }
 }
