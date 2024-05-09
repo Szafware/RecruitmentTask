@@ -5,22 +5,20 @@ namespace RecruitmentTask.Domain.People;
 public record PersonalData(
     string FirstName,
     string LastName,
-    DateTime BirthDateUtc,
+    DateOnly BirthDateUtc,
     string PhoneNumber)
 {
-    public int Age
+    public int Age { get; private set; }
+
+    public void SetAge(DateOnly utcNow)
     {
-        get
+        int age = utcNow.Year - BirthDateUtc.Year;
+
+        if (utcNow.Month < BirthDateUtc.Month || (utcNow.Month == BirthDateUtc.Month && utcNow.Day < BirthDateUtc.Day))
         {
-            DateTime nowUtc = DateTime.UtcNow;
-            int age = nowUtc.Year - BirthDateUtc.Year;
-
-            if (nowUtc.Month < BirthDateUtc.Month || (nowUtc.Month == BirthDateUtc.Month && nowUtc.Day < BirthDateUtc.Day))
-            {
-                age--;
-            }
-
-            return age;
+            age--;
         }
+
+        Age = age;
     }
 }

@@ -3,6 +3,6 @@
 public record Address(
     string StreetName,
     string HouseNumber,
-    string ApartmentNumber,
+    int? ApartmentNumber,
     string Town,
     string PostalCode);
