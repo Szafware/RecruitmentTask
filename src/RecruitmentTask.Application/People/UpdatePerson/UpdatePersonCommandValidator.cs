@@ -9,7 +9,7 @@ public class UpdatePersonCommandValidator : AbstractValidator<UpdatePersonComman
     private readonly string _onlyLettersRegex = @"^[A-Za-z]+$";
     private readonly string _allPolishLettersRegex = @"^[a-zA-ZąĄćĆęĘńŃóÓżŻźŹ]+$";
     private readonly string _polishPostalCodeRegex = @"^[0-9]{2}-[0-9]{3}";
-    private readonly string _onlyNineNumbersRegex = @"^\d{9}$";
+    private readonly string _onlyDigitsRegex = @"^\d+$";
     private readonly string _nonMixableDigitsAndLettersRegex = @"^([a-zA-Z]+(\d+)?|\d+[a-zA-Z]+)$";
 
     public UpdatePersonCommandValidator()
@@ -37,7 +37,8 @@ public class UpdatePersonCommandValidator : AbstractValidator<UpdatePersonComman
 
         RuleFor(person => person.PhoneNumber)
             .NotEmpty()
-            .Matches(_onlyNineNumbersRegex)
+            .Length(9)
+            .Matches(_onlyDigitsRegex)
             .WithMessage("Digits only eg. \"123456789\".");
 
         RuleFor(person => person.StreetName)

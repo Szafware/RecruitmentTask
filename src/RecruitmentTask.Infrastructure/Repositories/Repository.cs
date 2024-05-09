@@ -18,14 +18,14 @@ internal abstract class Repository<TEntity>
         _applicationDbContext = applicationDbContext;
     }
 
-    public async Task<Person> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<Person> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var person = await _applicationDbContext.Set<Person>().FirstOrDefaultAsync(entity => entity.Id == id, cancellationToken);
 
         return person;
     }
 
-    public async Task<IEnumerable<Person>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<Person>> GetAllAsync(CancellationToken cancellationToken = default)
     {
         var people = await _applicationDbContext.Set<Person>().ToListAsync(cancellationToken);
 
