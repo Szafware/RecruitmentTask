@@ -36,7 +36,7 @@ internal class RemovePersonCommand : PersonCommandBase
         }
         else
         {
-            AnsiConsole.MarkupLine($"[{ColorConstants.MESSAGE}]    There are no people to remove at the moment.[/]");
+            AnsiConsole.MarkupLine($"[{ColorConstants.REGULAR}]    There are no people to remove at the moment.[/]");
         }
 
         AnsiConsole.WriteLine();

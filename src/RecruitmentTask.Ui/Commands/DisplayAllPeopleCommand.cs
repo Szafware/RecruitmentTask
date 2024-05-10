@@ -62,7 +62,7 @@ internal class DisplayAllPeopleCommand : AsyncCommand
         }
         else
         {
-            AnsiConsole.MarkupLine($"[{ColorConstants.MESSAGE}]    There are no people to display at the moment.[/]");
+            AnsiConsole.MarkupLine($"[{ColorConstants.REGULAR}]    There are no people to display at the moment.[/]");
         }
 
         AnsiConsole.WriteLine();

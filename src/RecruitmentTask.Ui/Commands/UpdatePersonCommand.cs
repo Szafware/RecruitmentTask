@@ -5,6 +5,7 @@ using RecruitmentTask.Ui.ApiConnection;
 using RecruitmentTask.Api.Controllers.People;
 using RecruitmentTask.Ui.Constants;
 using Spectre.Console;
+using System.Linq;
 
 namespace RecruitmentTask.Ui.Commands;
 
@@ -22,6 +23,12 @@ internal class UpdatePersonCommand : PersonCommandBase
         AnsiConsole.WriteLine();
 
         var peopleResponses = await _apiConnectionService.GetAllPeopleAsync();
+
+        if (!peopleResponses.Any())
+        {
+            AnsiConsole.MarkupLine($"[{ColorConstants.REGULAR}]    There are no people to remove at the moment.[/]");
+            return 0;
+        }
 
         var personToUpdate = SelectPersonByNumber(peopleResponses);
 
