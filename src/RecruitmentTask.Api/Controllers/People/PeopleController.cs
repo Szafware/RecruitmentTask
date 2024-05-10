@@ -96,7 +96,7 @@ public class PeopleController : ControllerBase
         return result.IsSuccess ? Ok() : BadRequest(result.Error);
     }
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> RemovePerson(
         Guid id,
         CancellationToken cancellationToken)

@@ -9,7 +9,7 @@ public class CreatePersonCommandValidator : AbstractValidator<CreatePersonComman
     private readonly string _allPolishLettersRegex = @"^[a-zA-ZąĄćĆęĘńŃóÓżŻźŹ]+$";
     private readonly string _polishPostalCodeRegex = @"^[0-9]{2}-[0-9]{3}";
     private readonly string _onlyNineNumbersRegex = @"^\d{9}$";
-    private readonly string _nonMixableDigitsAndLettersRegex = @"^([a-zA-Z]+(\d+)?|\d+[a-zA-Z]+)$";
+    private readonly string _digitsAndLettersRegex = @"^[a-zA-Z0-9]+$";
 
     public CreatePersonCommandValidator()
     {
@@ -43,8 +43,8 @@ public class CreatePersonCommandValidator : AbstractValidator<CreatePersonComman
 
         RuleFor(person => person.HouseNumber)
             .NotEmpty()
-            .Length(3, 6)
-            .Matches(_nonMixableDigitsAndLettersRegex);
+            .Length(1, 6)
+            .Matches(_digitsAndLettersRegex);
 
         RuleFor(person => person.ApartmentNumber)
             .InclusiveBetween(1, 1000)
@@ -57,6 +57,7 @@ public class CreatePersonCommandValidator : AbstractValidator<CreatePersonComman
 
         RuleFor(person => person.PostalCode)
             .NotEmpty()
-            .Matches(_polishPostalCodeRegex);
+            .Matches(_polishPostalCodeRegex)
+            .WithMessage("Enter postal code in format XX-XXX.");
     }
 }
