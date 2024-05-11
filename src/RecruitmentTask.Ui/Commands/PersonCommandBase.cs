@@ -36,9 +36,9 @@ internal abstract class PersonCommandBase : AsyncCommand
         var peopleNumbers = Enumerable.Range(1, peopleResponses.Count());
 
         int selectedPersonNumber = AnsiConsole.Prompt(
-            new TextPrompt<int>($"[{ColorConstants.REGULAR}]Enter number of person to be removed:[/]")
+            new TextPrompt<int>($"[{ColorConstants.REGULAR}]{StylisticConstants.TAB}Enter number of person to be removed:[/]")
                 .AddChoices(peopleNumbers)
-                .ValidationErrorMessage($"[{ColorConstants.ERROR}]    Enter id in guid format.[/]"));
+                .ValidationErrorMessage($"[{ColorConstants.ERROR}]{StylisticConstants.TAB}Enter id in guid format.[/]"));
 
         int selectedPersonIndex = selectedPersonNumber - 1;
 

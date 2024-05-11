@@ -30,13 +30,13 @@ internal class RemovePersonCommand : PersonCommandBase
 
             AnsiConsole.WriteLine();
 
-            string message = apiResponse.IsSuccess ? $"[{ColorConstants.SUCCESS}]    Person removed successfully.[/]" : $"[{ColorConstants.ERROR}]    Removing person failed[/]";
+            string message = apiResponse.IsSuccess ? $"[{ColorConstants.SUCCESS}]{StylisticConstants.TAB}Person removed successfully.[/]" : $"[{ColorConstants.ERROR}]{StylisticConstants.TAB}Removing person failed[/]";
 
             AnsiConsole.MarkupLine(message);
         }
         else
         {
-            AnsiConsole.MarkupLine($"[{ColorConstants.REGULAR}]    There are no people to remove at the moment.[/]");
+            AnsiConsole.MarkupLine($"[{ColorConstants.REGULAR}]{StylisticConstants.TAB}There are no people to remove at the moment.[/]");
         }
 
         AnsiConsole.WriteLine();

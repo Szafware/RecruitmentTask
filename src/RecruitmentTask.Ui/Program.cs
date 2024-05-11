@@ -30,7 +30,7 @@ internal class Program
 
         while (true)
         {
-            AnsiConsole.Markup($"[{ColorConstants.PROMPT}]executing command $[/]: ");
+            AnsiConsole.Markup($"[{ColorConstants.PROMPT}]execute command $[/]: ");
 
             string input = Console.ReadLine();
 

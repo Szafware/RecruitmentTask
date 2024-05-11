@@ -1,11 +1,11 @@
 ﻿using Spectre.Console.Cli;
-using System;
 using System.Threading.Tasks;
 using RecruitmentTask.Ui.ApiConnection;
 using RecruitmentTask.Api.Controllers.People;
 using RecruitmentTask.Ui.Constants;
 using Spectre.Console;
 using System.Linq;
+using RecruitmentTask.Ui.Helpers;
 
 namespace RecruitmentTask.Ui.Commands;
 
@@ -26,69 +26,23 @@ internal class UpdatePersonCommand : PersonCommandBase
 
         if (!peopleResponses.Any())
         {
-            AnsiConsole.MarkupLine($"[{ColorConstants.REGULAR}]    There are no people to remove at the moment.[/]");
+            AnsiConsole.MarkupLine($"[{ColorConstants.REGULAR}]{StylisticConstants.TAB}There are no people to remove at the moment.[/]");
             return 0;
         }
 
         var personToUpdate = SelectPersonByNumber(peopleResponses);
 
-        AnsiConsole.WriteLine();
-        AnsiConsole.MarkupLine($"[{ColorConstants.REGULAR}]    Current first name value is:[/] [{ColorConstants.HIGHLIGHTED}]{personToUpdate.FirstName}[/]");
-        string firstName = ShouldUpdateProperty("First Name") ?
-            AnsiConsole.Prompt(new TextPrompt<string>($"[{ColorConstants.REGULAR}]    Enter first name:[/]")) :
-            personToUpdate.FirstName;
+        string firstName = GetUpdatedInformation(personToUpdate.FirstName, "first name");
+        string lastName = GetUpdatedInformation(personToUpdate.LastName, "last name");
+        var birthDate = GetUpdatedInformation(personToUpdate.BirthDate, "birth date");
+        string phoneNumber = GetUpdatedInformation(personToUpdate.PhoneNumber, "phone number");
+        string streetName = GetUpdatedInformation(personToUpdate.StreetName, "street name");
+        string houseNumber = GetUpdatedInformation(personToUpdate.HouseNumber, "house number");
+        int? apartmentNumber = GetUpdatedInformation(personToUpdate.ApartmentNumber, "apartment number");
+        string town = GetUpdatedInformation(personToUpdate.Town, "town");
+        string postalCode = GetUpdatedInformation(personToUpdate.PostalCode, "postal code");
 
         AnsiConsole.WriteLine();
-        AnsiConsole.MarkupLine($"[{ColorConstants.REGULAR}]    Current last name value is:[/] [{ColorConstants.HIGHLIGHTED}]{personToUpdate.LastName}[/]");
-        string lastName = ShouldUpdateProperty("Last Name") ? 
-            AnsiConsole.Prompt(new TextPrompt<string>($"[{ColorConstants.REGULAR}]    Enter last name:[/]")) :
-            personToUpdate.LastName;
-
-        AnsiConsole.WriteLine();
-        AnsiConsole.MarkupLine($"[{ColorConstants.REGULAR}]    Current birth date value is:[/] [{ColorConstants.HIGHLIGHTED}]{personToUpdate.BirthDate}[/]");
-        DateOnly birthDate = ShouldUpdateProperty("Birth Date") ?
-            AnsiConsole.Prompt(new TextPrompt<DateOnly>($"[{ColorConstants.REGULAR}]    Enter birth date:[/]").ValidationErrorMessage($"[{ColorConstants.ERROR}]        Enter birth date in date format.[/]")) :
-            personToUpdate.BirthDate;
-
-        AnsiConsole.WriteLine();
-        AnsiConsole.MarkupLine($"[{ColorConstants.REGULAR}]    Current phone number value is:[/] [{ColorConstants.HIGHLIGHTED}]{personToUpdate.PhoneNumber}[/]");
-        string phoneNumber = ShouldUpdateProperty("Phone Number") ? 
-            AnsiConsole.Prompt(new TextPrompt<string>($"[{ColorConstants.REGULAR}]    Enter phone number:[/]")) :
-            personToUpdate.PhoneNumber;
-
-        AnsiConsole.WriteLine();
-        AnsiConsole.MarkupLine($"[{ColorConstants.REGULAR}]    Current street name value is:[/] [{ColorConstants.HIGHLIGHTED}]{personToUpdate.StreetName}[/]");
-        string streetName = ShouldUpdateProperty("Street Name") ? 
-            AnsiConsole.Prompt(new TextPrompt<string>($"[{ColorConstants.REGULAR}]    Enter street name:[/]")) :
-            personToUpdate.StreetName;
-
-        AnsiConsole.WriteLine();
-        AnsiConsole.MarkupLine($"[{ColorConstants.REGULAR}]    Current house number value is:[/] [{ColorConstants.HIGHLIGHTED}]{personToUpdate.HouseNumber}[/]");
-        string houseNumber = ShouldUpdateProperty("House Number") ? 
-            AnsiConsole.Prompt(new TextPrompt<string>($"[{ColorConstants.REGULAR}]    Enter house number:[/]")) :
-            personToUpdate.HouseNumber;
-
-        int? apartmentNumber = personToUpdate.ApartmentNumber;
-
-        string currentApartmentNumberValueToDisplay = apartmentNumber?.ToString() ?? "-no value-";
-        AnsiConsole.WriteLine();
-        AnsiConsole.MarkupLine($"[{ColorConstants.REGULAR}]    Current house number value is:[/] [{ColorConstants.HIGHLIGHTED}]{currentApartmentNumberValueToDisplay}[/]");
-        if (ShouldUpdateProperty("Apartment Number"))
-        {
-            apartmentNumber = AnsiConsole.Prompt(new TextPrompt<int?>($"[{ColorConstants.REGULAR}]    Enter apartment number:[/]"));
-        }
-
-        AnsiConsole.WriteLine();
-        AnsiConsole.MarkupLine($"[{ColorConstants.REGULAR}]    Current town value is:[/] [{ColorConstants.HIGHLIGHTED}]{personToUpdate.Town}[/]");
-        string town = ShouldUpdateProperty("Town") ? 
-            AnsiConsole.Prompt(new TextPrompt<string>($"[{ColorConstants.REGULAR}]    Enter town:[/]")) :
-            personToUpdate.Town;
-
-        AnsiConsole.WriteLine();
-        AnsiConsole.MarkupLine($"[{ColorConstants.REGULAR}]    Current postal code is:[/] [{ColorConstants.HIGHLIGHTED}]{personToUpdate.PostalCode}[/]");
-        string postalCode = ShouldUpdateProperty("Postal Code") ?
-            AnsiConsole.Prompt(new TextPrompt<string>($"[{ColorConstants.REGULAR}]    Enter postal code:[/]")) :
-            personToUpdate.PostalCode;
 
         var updatePersonRequest = new UpdatePersonRequest(
             personToUpdate.Id,
@@ -104,19 +58,17 @@ internal class UpdatePersonCommand : PersonCommandBase
 
         var apiResponse = await _apiConnectionService.UpdatePersonAsync(updatePersonRequest);
 
-        AnsiConsole.WriteLine();
-
         if (apiResponse.IsSuccess)
         {
-            AnsiConsole.MarkupLine($"[{ColorConstants.SUCCESS}]    Person updated successfully.[/]");
+            AnsiConsole.MarkupLine($"[{ColorConstants.SUCCESS}]{StylisticConstants.TAB}Person updated successfully.[/]");
         }
         else
         {
-            AnsiConsole.MarkupLine($"[{ColorConstants.REGULAR}]    Updating person failed. Validation errors:[/]");
+            AnsiConsole.MarkupLine($"[{ColorConstants.REGULAR}]{StylisticConstants.TAB}Updating person failed. Validation errors:[/]");
 
             foreach (var validationError in apiResponse.ValidationErrors)
             {
-                AnsiConsole.MarkupLineInterpolated($"[{ColorConstants.REGULAR}]    {validationError.PropertyName}: [/][{ColorConstants.ERROR}]{validationError.ErrorMessage}[/]");
+                AnsiConsole.MarkupLineInterpolated($"[{ColorConstants.REGULAR}]{StylisticConstants.TAB}{validationError.PropertyName}: [/][{ColorConstants.ERROR}]{validationError.ErrorMessage}[/]");
             }
         }
 
@@ -125,14 +77,27 @@ internal class UpdatePersonCommand : PersonCommandBase
         return 0;
     }
 
-    private bool ShouldUpdateProperty(string propertyName)
+    private TInformation GetUpdatedInformation<TInformation>(TInformation currentInformation, string informationName)
     {
-        string shouldUpdatePropertyAnswer = AnsiConsole.Prompt(
-            new TextPrompt<string>($"[{ColorConstants.REGULAR}]    Do you want to update {propertyName}?[/]")
-                .AddChoices(["yes", "no"]));
+        AnsiConsole.WriteLine();
 
-        bool shouldUpdateProperty = shouldUpdatePropertyAnswer == "yes";
+        string currentInformationDisplay = currentInformation?.ToString() ?? "-no value-";
 
-        return shouldUpdateProperty;
+        AnsiConsole.MarkupLine($"[{ColorConstants.REGULAR}]{StylisticConstants.TAB}Current {informationName} is:[/] [{ColorConstants.HIGHLIGHTED}]{currentInformationDisplay}[/]");
+
+        bool shouldUpdateInformation = ShouldUpdateInformation(informationName);
+
+        var information = shouldUpdateInformation ? 
+            AnsiConsole.Prompt(new TextPrompt<TInformation>($"[{ColorConstants.REGULAR}]{StylisticConstants.TAB}Enter {informationName}:[/]")) :
+            currentInformation;
+
+        return information;
+    }
+
+    private bool ShouldUpdateInformation(string informationName)
+    {
+        bool shouldUpdateInformation = ConsoleHelper.AskYesNoQuestion($"[{ColorConstants.REGULAR}]{StylisticConstants.TAB}Do you want to update {informationName}?[/]");
+
+        return shouldUpdateInformation;
     }
 }
