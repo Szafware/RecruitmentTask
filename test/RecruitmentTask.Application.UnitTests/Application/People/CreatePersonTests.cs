@@ -8,7 +8,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace RecruitmentTask.Application.UnitTests.People;
+namespace RecruitmentTask.Application.UnitTests.Application.People;
 
 public class CreatePersonTests
 {
@@ -35,31 +35,6 @@ public class CreatePersonTests
     }
 
     [Fact]
-    public async Task Handle_Should_ReturnFailureResult_WhenPersonDataIsNotUnique()
-    {
-        // Arrange
-        var personRepositoryMock = new Mock<IPersonRepository>();
-
-        personRepositoryMock.Setup(
-            pr => pr.IdenticalDataPersonExistAsync(
-                It.IsAny<Person>(),
-                It.IsAny<CancellationToken>()))
-            .ReturnsAsync(true);
-
-        var handler = new CreatePersonCommandHandler(
-            personRepositoryMock.Object,
-            _unitOfWorkMock.Object,
-            _dateTimeProviderMock.Object);
-
-        // Act
-        var result = await handler.Handle(_createPersonCommand, default);
-
-        // Assert
-        result.IsFailure.Should().BeTrue();
-        result.Error.Should().Be(PersonErrors.IdenticalData);
-    }
-
-    [Fact]
     public async Task Handle_Should_ReturnSuccessResult_WhenPersonDataIsUnique()
     {
         // Arrange
@@ -82,6 +57,31 @@ public class CreatePersonTests
         // Assert
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeEmpty();
+    }
+
+    [Fact]
+    public async Task Handle_Should_ReturnFailureResult_WhenPersonDataIsNotUnique()
+    {
+        // Arrange
+        var personRepositoryMock = new Mock<IPersonRepository>();
+
+        personRepositoryMock.Setup(
+            pr => pr.IdenticalDataPersonExistAsync(
+                It.IsAny<Person>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(true);
+
+        var handler = new CreatePersonCommandHandler(
+            personRepositoryMock.Object,
+            _unitOfWorkMock.Object,
+            _dateTimeProviderMock.Object);
+
+        // Act
+        var result = await handler.Handle(_createPersonCommand, default);
+
+        // Assert
+        result.IsFailure.Should().BeTrue();
+        result.Error.Should().Be(PersonErrors.IdenticalData);
     }
 
     [Fact]

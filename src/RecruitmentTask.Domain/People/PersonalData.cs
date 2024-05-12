@@ -43,7 +43,7 @@ public sealed record PersonalData
     {
         var dateOnlyUtcNow = DateOnly.FromDateTime(utcNow);
 
-        int age = utcNow.Year - BirthDateUtc.Year;
+        int age = dateOnlyUtcNow.Year - BirthDateUtc.Year;
 
         if (BirthDateUtc > dateOnlyUtcNow.AddYears(-age))
         {
