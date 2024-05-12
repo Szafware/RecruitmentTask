@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{1DD42154-4
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5999FA5C-4150-473E-BFDB-5EA8798BF7CC}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RecruitmentTask.Application.UnitTests", "test\RecruitmentTask.Application.UnitTests\RecruitmentTask.Application.UnitTests.csproj", "{433F636D-70D8-486A-BB02-AE15364FCC63}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RecruitmentTask.ArchitectureTests", "test\RecruitmentTask.ArchitectureTests\RecruitmentTask.ArchitectureTests.csproj", "{531AD64D-3366-48C8-B2F2-2FA3DEF29E87}"
 EndProject
 Global

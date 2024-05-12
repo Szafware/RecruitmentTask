@@ -41,7 +41,7 @@ internal sealed class UpdatePersonCommandHandler : ICommandHandler<UpdatePersonC
         person.SetAddress(address);
         person.SetPersonalData(personalData);
 
-        bool identicalDataPersonExists = await _personRepository.IdenticalDataPersonExistAsync(person);
+        bool identicalDataPersonExists = await _personRepository.IdenticalDataPersonExistAsync(person, cancellationToken);
 
         if (identicalDataPersonExists)
         {
