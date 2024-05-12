@@ -1,4 +1,5 @@
 ﻿using RecruitmentTask.Api.Controllers.People;
+using RecruitmentTask.Application.Exceptions;
 using RecruitmentTask.Ui.ApiConnection;
 using RecruitmentTask.Ui.Constants;
 using RecruitmentTask.Ui.Helpers;
@@ -62,11 +63,20 @@ internal class CreatePersonCommand : AsyncCommand
         }
         else
         {
-            AnsiConsole.MarkupLine($"[{ColorConstants.REGULAR}]{StylisticConstants.TAB}Creating person failed. Validation errors:[/]");
-
-            foreach (var validationError in apiResponse.ValidationErrors)
+            if (apiResponse.GeneralError is not null)
             {
-                AnsiConsole.MarkupLineInterpolated($"[{ColorConstants.REGULAR}]{StylisticConstants.TAB}{validationError.PropertyName}: [/][{ColorConstants.ERROR}]{validationError.ErrorMessage}[/]");
+                AnsiConsole.MarkupLineInterpolated($"[{ColorConstants.ERROR}]{StylisticConstants.TAB}{apiResponse.GeneralError}[/]");
+            }
+            else
+            {
+                AnsiConsole.MarkupLine($"[{ColorConstants.REGULAR}]{StylisticConstants.TAB}Creating person failed. Validation errors:[/]");
+                AnsiConsole.WriteLine();
+
+                foreach (var validationError in apiResponse.ValidationErrors)
+                {
+                    AnsiConsole.MarkupLineInterpolated($"[{ColorConstants.REGULAR}]{StylisticConstants.TAB}{StylisticConstants.TAB}{validationError.PropertyName}: [/][{ColorConstants.ERROR}]{validationError.ErrorMessage}[/]");
+                }
+
             }
         }
 

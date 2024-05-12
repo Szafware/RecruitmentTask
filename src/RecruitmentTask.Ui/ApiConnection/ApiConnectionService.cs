@@ -39,7 +39,7 @@ internal class ApiConnectionService : IApiConnectionService
 
         restRequest.AddJsonBody(createPersonRequest);
 
-        var restResponse = await _restClient.ExecuteAsync<Guid>(restRequest);
+        var restResponse = await _restClient.ExecuteAsync(restRequest);
 
         var apiResponse = CreateApiResponse(restResponse);
 
@@ -84,23 +84,43 @@ internal class ApiConnectionService : IApiConnectionService
 
         if (!restResponse.IsSuccessful)
         {
-            var validationErrorsJson = restResponse.Content;
-
-            var jsonObject = JObject.Parse(validationErrorsJson);
-
-            var errorsArray = (JArray)jsonObject["errors"];
-
-            var validationErrors = errorsArray.Select(error =>
+            try
             {
-                string propertyName = (string)error["propertyName"];
-                string errorMessage = (string)error["errorMessage"];
-                return new ValidationError(propertyName, errorMessage);
-            }).ToList();
+                var validationErrorsJson = restResponse.Content;
 
-            foreach (var validationError in validationErrors)
-            {
-                apiResponse.ValidationErrors.Add(validationError);
+                var jsonObject = JObject.Parse(validationErrorsJson);
+
+                bool isPropertyValidationError = jsonObject.ContainsKey("type");
+                bool isBadRequest = jsonObject.ContainsKey("code");
+
+                if (isPropertyValidationError)
+                {
+                    var propertyErrorJArray = (JArray)jsonObject["errors"];
+
+                    var validationErrors = propertyErrorJArray.Select(error =>
+                    {
+                        string propertyName = (string)error["propertyName"];
+                        string errorMessage = (string)error["errorMessage"];
+                        return new ValidationError(propertyName, errorMessage);
+                    }).ToList();
+
+                    foreach (var validationError in validationErrors)
+                    {
+                        apiResponse.ValidationErrors.Add(validationError);
+                    }
+                }
+                else if (isBadRequest)
+                {
+                    var errorMessage = jsonObject["name"].Value<string>();
+
+                    apiResponse.GeneralError = $"Error: {errorMessage}";
+                }
             }
+            catch
+            {
+                apiResponse.GeneralError = $"Unexpected error occurred.";
+            }
+
         }
 
         return apiResponse;

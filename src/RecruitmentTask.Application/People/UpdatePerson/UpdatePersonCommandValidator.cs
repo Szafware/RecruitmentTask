@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using RecruitmentTask.Application.Constants;
 using RecruitmentTask.Application.People.UpdatePerson;
 using System;
 
@@ -6,12 +7,6 @@ namespace RecruitmentTask.Application.People.CreatePerson;
 
 internal class UpdatePersonCommandValidator : AbstractValidator<UpdatePersonCommand>
 {
-    private readonly string _onlyLettersRegex = @"^[A-Za-z]+$";
-    private readonly string _allPolishLettersRegex = @"^[a-zA-ZąĄćĆęĘńŃóÓżŻźŹ]+$";
-    private readonly string _polishPostalCodeRegex = @"^[0-9]{2}-[0-9]{3}";
-    private readonly string _onlyDigitsRegex = @"^\d+$";
-    private readonly string _digitsAndLettersRegex = @"^[a-zA-Z0-9]+$";
-
     public UpdatePersonCommandValidator()
     {
         RuleFor(person => person.Id)
@@ -19,50 +14,50 @@ internal class UpdatePersonCommandValidator : AbstractValidator<UpdatePersonComm
 
         RuleFor(person => person.FirstName)
             .NotEmpty()
-            .Length(3, 15)
-            .Matches(_onlyLettersRegex);
+            .Length(ValidationValueConstants.FirstNameCharacterCountMin, ValidationValueConstants.FirstNameCharacterCountMax)
+            .Matches(ValidationRegexConstants.OnlyLettersRegex);
 
         RuleFor(person => person.LastName)
             .NotEmpty()
-            .Length(2, 20)
-            .Matches(_allPolishLettersRegex);
+            .Length(ValidationValueConstants.LastNameCharacterCountMin, ValidationValueConstants.LastNameCharacterCountMax)
+            .Matches(ValidationRegexConstants.AllPolishLettersRegex);
 
         RuleFor(person => person.BirthDate)
-            .GreaterThan(DateOnly.FromDateTime(DateTime.Now.AddYears(-100)))
-            .WithMessage("You're not that old, are ya?");
+            .LessThan(DateOnly.FromDateTime(DateTime.Now.AddYears(-ValidationValueConstants.BirthDateYearMin)))
+            .WithMessage(ValidationMessageConstants.BirthDateTooLowValidationMessage);
 
         RuleFor(person => person.BirthDate)
-            .LessThan(DateOnly.FromDateTime(DateTime.Now.AddYears(-3)))
-            .WithMessage("Sorry, no toddlers accepted.");
+            .GreaterThan(DateOnly.FromDateTime(DateTime.Now.AddYears(-ValidationValueConstants.BirthDateYearMax)))
+            .WithMessage(ValidationMessageConstants.BirthDateTooHighValidationMessage);
 
         RuleFor(person => person.PhoneNumber)
             .NotEmpty()
-            .Length(9)
-            .Matches(_onlyDigitsRegex)
-            .WithMessage("Digits only eg. \"123456789\".");
+            .Length(ValidationValueConstants.PhoneNumberCharacterCount)
+            .Matches(ValidationRegexConstants.OnlyDigitsRegex)
+            .WithMessage(ValidationMessageConstants.PhoneNumberValidationMessage);
 
         RuleFor(person => person.StreetName)
             .NotEmpty()
-            .Length(2, 20)
-            .Matches(_allPolishLettersRegex);
+            .Length(ValidationValueConstants.StreetNameCharacterCountMin, ValidationValueConstants.StreetNameCharacterCountMax)
+            .Matches(ValidationRegexConstants.AllPolishLettersRegex);
 
         RuleFor(person => person.HouseNumber)
             .NotEmpty()
-            .Length(1, 6)
-            .Matches(_digitsAndLettersRegex);
+            .Length(ValidationValueConstants.HouseNumberCharacterCountMin, ValidationValueConstants.HouseNumberCharacterCountMax)
+            .Matches(ValidationRegexConstants.DigitsAndLettersRegex);
 
         RuleFor(person => person.ApartmentNumber)
-            .InclusiveBetween(1, 1000)
-            .When(p => p is not null);
+            .InclusiveBetween(ValidationValueConstants.ApartmentNumberValueMin, ValidationValueConstants.ApartmentNumberValueMax)
+            .When(command => command.ApartmentNumber is not null);
 
         RuleFor(person => person.Town)
             .NotEmpty()
-            .Length(2, 20)
-            .Matches(_allPolishLettersRegex);
+            .Length(ValidationValueConstants.TownCharacterCountMin, ValidationValueConstants.TownCharacterCountMax)
+            .Matches(ValidationRegexConstants.AllPolishLettersRegex);
 
         RuleFor(person => person.PostalCode)
             .NotEmpty()
-            .Matches(_polishPostalCodeRegex)
-            .WithMessage("Enter postal code in format XX-XXX.");
+            .Matches(ValidationRegexConstants.PolishPostalCodeRegex)
+            .WithMessage(ValidationMessageConstants.PostalCodeValidationMessage);
     }
 }
