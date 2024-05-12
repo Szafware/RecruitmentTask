@@ -3,7 +3,7 @@ using System;
 
 namespace RecruitmentTask.Application.People.CreatePerson;
 
-public class CreatePersonCommandValidator : AbstractValidator<CreatePersonCommand>
+internal class CreatePersonCommandValidator : AbstractValidator<CreatePersonCommand>
 {
     private readonly string _onlyLettersRegex = @"^[A-Za-z]+$";
     private readonly string _allPolishLettersRegex = @"^[a-zA-ZąĄćĆęĘńŃóÓżŻźŹ]+$";

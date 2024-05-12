@@ -14,22 +14,22 @@ public sealed class Person : Entity
         DateTime createdOnUtc,
         PersonalData personalData,
         Address address,
-        DateOnly utcNow)
+        DateOnly dateOnlyUtc)
         : base(id, createdOnUtc)
     {
         PersonalData = personalData;
         Address = address;
 
-        PersonalData.SetAge(utcNow);
+        PersonalData.SetAge(dateOnlyUtc);
     }
 
     public PersonalData PersonalData { get; private set; }
 
     public Address Address { get; private set; }
 
-    public static Person CreateNew(DateTime createdOnUtc, PersonalData personalData, Address address, DateOnly utcNow)
+    public static Person CreateNew(DateTime createdOnUtc, PersonalData personalData, Address address, DateOnly dateOnlyUtc)
     {
-        var person = new Person(Guid.NewGuid(), createdOnUtc, personalData, address, utcNow);
+        var person = new Person(Guid.NewGuid(), createdOnUtc, personalData, address, dateOnlyUtc);
 
         return person;
     }

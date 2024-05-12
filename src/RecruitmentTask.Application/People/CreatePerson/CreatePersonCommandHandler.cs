@@ -31,7 +31,9 @@ internal sealed class CreatePersonCommandHandler : ICommandHandler<CreatePersonC
         var personalData = new PersonalData(request.FirstName, request.LastName, request.BirthDate, request.PhoneNumber);
         var address = new Address(request.StreetName, request.HouseNumber, request.ApartmentNumber, request.Town, request.PostalCode);
 
-        var person = Person.CreateNew(utcNow, personalData, address, DateOnly.FromDateTime(utcNow));
+        var dateOnlyUtc = DateOnly.FromDateTime(utcNow);
+
+        var person = Person.CreateNew(utcNow, personalData, address, dateOnlyUtc);
 
         _personRepository.Add(person);
 

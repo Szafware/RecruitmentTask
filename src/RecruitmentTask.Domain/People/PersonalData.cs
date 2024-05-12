@@ -10,11 +10,11 @@ public record PersonalData(
 {
     public int Age { get; private set; }
 
-    public void SetAge(DateOnly utcNow)
+    public void SetAge(DateOnly dateOnlyUtc)
     {
-        int age = utcNow.Year - BirthDateUtc.Year;
+        int age = dateOnlyUtc.Year - BirthDateUtc.Year;
 
-        if (utcNow.Month < BirthDateUtc.Month || (utcNow.Month == BirthDateUtc.Month && utcNow.Day < BirthDateUtc.Day))
+        if (dateOnlyUtc.Month < BirthDateUtc.Month || (dateOnlyUtc.Month == BirthDateUtc.Month && dateOnlyUtc.Day < BirthDateUtc.Day))
         {
             age--;
         }
