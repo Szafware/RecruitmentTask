@@ -14,7 +14,7 @@ public sealed record PersonalData
         LastName = lastName;
         BirthDateUtc = birthDateUtc;
         PhoneNumber = phoneNumber;
-        Age = CalculateAge(utcNow);
+        Age = CalculateAgeInternal(utcNow);
     }
 
     public string FirstName { get; init; }
@@ -25,9 +25,21 @@ public sealed record PersonalData
 
     public string PhoneNumber { get; init; }
 
-    public int Age { get; init; }
-    
-    private int CalculateAge(DateTime utcNow)
+    public int Age { get; private set; }
+
+    public void CalculateAge(DateTime utcNow)
+    {
+        Age = CalculateAgeInternal(utcNow);
+    }
+
+    public static PersonalData Create(string firstName, string lastName, DateOnly birthDateUtc, string phoneNumber, DateTime utcNow)
+    {
+        var personalData = new PersonalData(firstName, lastName, birthDateUtc, phoneNumber, utcNow);
+
+        return personalData;
+    }
+
+    private int CalculateAgeInternal(DateTime utcNow)
     {
         var dateOnlyUtcNow = DateOnly.FromDateTime(utcNow);
 
@@ -39,12 +51,5 @@ public sealed record PersonalData
         }
 
         return age;
-    }
-
-    public static PersonalData Create(string firstName, string lastName, DateOnly birthDateUtc, string phoneNumber, DateTime utcNow)
-    {
-        var personalData = new PersonalData(firstName, lastName, birthDateUtc, phoneNumber, utcNow);
-
-        return personalData;
     }
 }

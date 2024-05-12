@@ -21,7 +21,6 @@ namespace RecruitmentTask.Infrastructure.Migrations
                     Address_PostalCode = table.Column<string>(type: "TEXT", maxLength: 6, nullable: false),
                     Address_StreetName = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
                     Address_Town = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
-                    PersonalData_Age = table.Column<int>(type: "INTEGER", nullable: false),
                     PersonalData_BirthDateUtc = table.Column<DateOnly>(type: "TEXT", nullable: false),
                     PersonalData_FirstName = table.Column<string>(type: "TEXT", maxLength: 15, nullable: false),
                     PersonalData_LastName = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),

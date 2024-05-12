@@ -24,7 +24,7 @@ public sealed class Person : Entity
 
     public Address Address { get; private set; }
 
-    public static Person CreateNew(DateTime createdOnUtc, PersonalData personalData, Address address)
+    public static Person Create(DateTime createdOnUtc, PersonalData personalData, Address address)
     {
         var person = new Person(Guid.NewGuid(), createdOnUtc, personalData, address);
 

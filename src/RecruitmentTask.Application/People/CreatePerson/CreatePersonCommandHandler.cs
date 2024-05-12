@@ -31,7 +31,7 @@ internal sealed class CreatePersonCommandHandler : ICommandHandler<CreatePersonC
         var personalData = PersonalData.Create(request.FirstName, request.LastName, request.BirthDate, request.PhoneNumber, utcNow);
         var address = new Address(request.StreetName, request.HouseNumber, request.ApartmentNumber, request.Town, request.PostalCode);
 
-        var person = Person.CreateNew(utcNow, personalData, address);
+        var person = Person.Create(utcNow, personalData, address);
 
         bool identicalDataPersonExists = await _personRepository.IdenticalDataPersonExistAsync(person, cancellationToken);
 

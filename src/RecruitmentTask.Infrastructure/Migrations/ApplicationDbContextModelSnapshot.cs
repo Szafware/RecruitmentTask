@@ -59,9 +59,6 @@ namespace RecruitmentTask.Infrastructure.Migrations
                         {
                             b1.IsRequired();
 
-                            b1.Property<int>("Age")
-                                .HasColumnType("INTEGER");
-
                             b1.Property<DateOnly>("BirthDateUtc")
                                 .HasColumnType("TEXT");
 

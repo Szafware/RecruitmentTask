@@ -20,6 +20,7 @@ internal class UserConfiguration : IEntityTypeConfiguration<Person>
                 personalData.Property(personalData => personalData.FirstName).IsRequired().HasMaxLength(15);
                 personalData.Property(personalData => personalData.LastName).IsRequired().HasMaxLength(20);
                 personalData.Property(personalData => personalData.BirthDateUtc);
+                personalData.Ignore(personalData => personalData.Age);
                 personalData.Property(personalData => personalData.PhoneNumber).IsRequired().HasMaxLength(9);
             });
 
