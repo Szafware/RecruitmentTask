@@ -1,4 +1,5 @@
-﻿using RecruitmentTask.Application.Abstraction.Messaging;
+﻿using RecruitmentTask.Application.Abstraction.Clock;
+using RecruitmentTask.Application.Abstraction.Messaging;
 using RecruitmentTask.Domain.Abstractions;
 using RecruitmentTask.Domain.People;
 using System;
@@ -11,13 +12,16 @@ internal sealed class UpdatePersonCommandHandler : ICommandHandler<UpdatePersonC
 {
     private readonly IPersonRepository _personRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IDateTimeProvider _dateTimeProvider;
 
     public UpdatePersonCommandHandler(
         IPersonRepository personRepository,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        IDateTimeProvider dateTimeProvider)
     {
         _personRepository = personRepository;
         _unitOfWork = unitOfWork;
+        _dateTimeProvider = dateTimeProvider;
     }
 
     public async Task<Result> Handle(UpdatePersonCommand request, CancellationToken cancellationToken)
@@ -29,7 +33,9 @@ internal sealed class UpdatePersonCommandHandler : ICommandHandler<UpdatePersonC
             return Result.Failure(PersonErrors.NotFound);
         }
 
-        var personalData = new PersonalData(request.FirstName, request.LastName, request.BirthDate, request.PhoneNumber);
+        var utcNow = _dateTimeProvider.UtcNow;
+
+        var personalData = PersonalData.Create(request.FirstName, request.LastName, request.BirthDate, request.PhoneNumber, utcNow);
         var address = new Address(request.StreetName, request.HouseNumber, request.ApartmentNumber, request.Town, request.PostalCode);
 
         person.SetAddress(address);

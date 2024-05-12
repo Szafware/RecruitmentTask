@@ -28,12 +28,10 @@ internal sealed class CreatePersonCommandHandler : ICommandHandler<CreatePersonC
     {
         var utcNow = _dateTimeProvider.UtcNow;
 
-        var personalData = new PersonalData(request.FirstName, request.LastName, request.BirthDate, request.PhoneNumber);
+        var personalData = PersonalData.Create(request.FirstName, request.LastName, request.BirthDate, request.PhoneNumber, utcNow);
         var address = new Address(request.StreetName, request.HouseNumber, request.ApartmentNumber, request.Town, request.PostalCode);
 
-        var dateOnlyUtc = DateOnly.FromDateTime(utcNow);
-
-        var person = Person.CreateNew(utcNow, personalData, address, dateOnlyUtc);
+        var person = Person.CreateNew(utcNow, personalData, address);
 
         bool identicalDataPersonExists = await _personRepository.IdenticalDataPersonExistAsync(person);
 
