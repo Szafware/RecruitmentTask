@@ -15,4 +15,8 @@
     <ProjectReference Include="..\RecruitmentTask.Domain\RecruitmentTask.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+  	<InternalsVisibleTo Include="RecruitmentTask.Application.UnitTests" />
+  </ItemGroup>
+
 </Project>
