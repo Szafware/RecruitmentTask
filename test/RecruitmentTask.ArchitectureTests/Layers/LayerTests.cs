@@ -1,4 +1,5 @@
-﻿using NetArchTest.Rules;
+﻿using FluentAssertions;
+using NetArchTest.Rules;
 
 namespace RecruitmentTask.ArchitectureTests.Layers;
 
@@ -12,7 +13,7 @@ public class LayerTests : BaseTest
             .NotHaveDependencyOn(ApplicationAssembly.GetName().Name)
             .GetResult();
 
-        Assert.True(result.IsSuccessful);
+        result.IsSuccessful.Should().BeTrue();
     }
 
     [Fact]
@@ -23,7 +24,7 @@ public class LayerTests : BaseTest
             .NotHaveDependencyOn(InfrastructureAssembly.GetName().Name)
             .GetResult();
 
-        Assert.True(result.IsSuccessful);
+        result.IsSuccessful.Should().BeTrue();
     }
 
     [Fact]
@@ -34,7 +35,7 @@ public class LayerTests : BaseTest
             .NotHaveDependencyOn(InfrastructureAssembly.GetName().Name)
             .GetResult();
 
-        Assert.True(result.IsSuccessful);
+        result.IsSuccessful.Should().BeTrue();
     }
 
     [Fact]
@@ -45,7 +46,7 @@ public class LayerTests : BaseTest
             .NotHaveDependencyOn(PresentationAssembly.GetName().Name)
             .GetResult();
 
-        Assert.True(result.IsSuccessful);
+        result.IsSuccessful.Should().BeTrue();
     }
 
     [Fact]
@@ -56,6 +57,6 @@ public class LayerTests : BaseTest
             .NotHaveDependencyOn(PresentationAssembly.GetName().Name)
             .GetResult();
 
-        Assert.True(result.IsSuccessful);
+        result.IsSuccessful.Should().BeTrue();
     }
 }

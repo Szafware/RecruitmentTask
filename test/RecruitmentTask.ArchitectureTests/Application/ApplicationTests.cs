@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using FluentAssertions;
+using FluentValidation;
 using NetArchTest.Rules;
 using RecruitmentTask.Application.Abstraction.Messaging;
 
@@ -18,7 +19,7 @@ public class ApplicationTests : BaseTest
             .HaveNameEndingWith("CommandHandler")
             .GetResult();
 
-        Assert.True(result.IsSuccessful);
+        result.IsSuccessful.Should().BeTrue();
     }
 
     [Fact]
@@ -33,7 +34,7 @@ public class ApplicationTests : BaseTest
             .NotBePublic()
             .GetResult();
 
-        Assert.True(result.IsSuccessful);
+        result.IsSuccessful.Should().BeTrue();
     }
 
     [Fact]
@@ -46,7 +47,7 @@ public class ApplicationTests : BaseTest
             .HaveNameEndingWith("QueryHandler")
             .GetResult();
 
-        Assert.True(result.IsSuccessful);
+        result.IsSuccessful.Should().BeTrue();
     }
 
     [Fact]
@@ -59,7 +60,7 @@ public class ApplicationTests : BaseTest
             .NotBePublic()
             .GetResult();
 
-        Assert.True(result.IsSuccessful);
+        result.IsSuccessful.Should().BeTrue();
     }
 
     [Fact]
@@ -72,7 +73,7 @@ public class ApplicationTests : BaseTest
             .HaveNameEndingWith("Validator")
             .GetResult();
 
-        Assert.True(result.IsSuccessful);
+        result.IsSuccessful.Should().BeTrue();
     }
 
     [Fact]
@@ -85,6 +86,6 @@ public class ApplicationTests : BaseTest
             .NotBePublic()
             .GetResult();
 
-        Assert.True(result.IsSuccessful);
+        result.IsSuccessful.Should().BeTrue();
     }
 }

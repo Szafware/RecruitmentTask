@@ -1,4 +1,5 @@
-﻿using NetArchTest.Rules;
+﻿using FluentAssertions;
+using NetArchTest.Rules;
 using RecruitmentTask.Domain.Abstractions;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,6 @@ public class DomainTests : BaseTest
             }
         }
 
-        Assert.Empty(failingTypes);
+        failingTypes.Should().BeEmpty();
     }
 }
