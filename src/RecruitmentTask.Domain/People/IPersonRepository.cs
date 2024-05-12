@@ -14,4 +14,6 @@ public interface IPersonRepository
     void Add(Person person);
 
     void Remove(Person person);
+
+    Task<bool> IdenticalDataPersonExistAsync(Person person);
 }

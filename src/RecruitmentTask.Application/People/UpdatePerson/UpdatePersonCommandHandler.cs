@@ -1,6 +1,7 @@
 ﻿using RecruitmentTask.Application.Abstraction.Messaging;
 using RecruitmentTask.Domain.Abstractions;
 using RecruitmentTask.Domain.People;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -33,6 +34,13 @@ internal sealed class UpdatePersonCommandHandler : ICommandHandler<UpdatePersonC
 
         person.SetAddress(address);
         person.SetPersonalData(personalData);
+
+        bool identicalDataPersonExists = await _personRepository.IdenticalDataPersonExistAsync(person);
+
+        if (identicalDataPersonExists)
+        {
+            return Result.Failure<Guid>(PersonErrors.IdenticalData);
+        }
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
