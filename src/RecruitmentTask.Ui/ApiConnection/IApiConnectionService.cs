@@ -8,11 +8,13 @@ namespace RecruitmentTask.Ui.ApiConnection;
 
 internal interface IApiConnectionService
 {
+    Task<bool> IsApiAvailableAsync();
+
     Task<IEnumerable<PersonResponse>> GetAllPeopleAsync();
 
     Task<ApiResponse> CreatePersonAsync(CreatePersonRequest createPersonRequest);
 
     Task<ApiResponse> UpdatePersonAsync(UpdatePersonRequest updatePersonRequest);
 
-    Task<ApiResponse> RemovePerson(Guid personId);
+    Task<ApiResponse> RemovePersonAsync(Guid personId);
 }

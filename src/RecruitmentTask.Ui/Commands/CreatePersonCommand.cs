@@ -1,6 +1,6 @@
 ﻿using RecruitmentTask.Api.Controllers.People;
-using RecruitmentTask.Application.Exceptions;
 using RecruitmentTask.Ui.ApiConnection;
+using RecruitmentTask.Ui.Commands.Base;
 using RecruitmentTask.Ui.Constants;
 using RecruitmentTask.Ui.Helpers;
 using Spectre.Console;
@@ -10,18 +10,20 @@ using System.Threading.Tasks;
 
 namespace RecruitmentTask.Ui.Commands;
 
-internal class CreatePersonCommand : AsyncCommand
+internal class CreatePersonCommand : ApiCommandBase
 {
-    private readonly IApiConnectionService _apiConnectionService;
-
-    public CreatePersonCommand(IApiConnectionService apiConnectionService)
+    public CreatePersonCommand(IApiConnectionService apiConnectionService) : base(apiConnectionService)
     {
-        _apiConnectionService = apiConnectionService;
     }
 
     public override async Task<int> ExecuteAsync(CommandContext context)
     {
         AnsiConsole.WriteLine();
+
+        if (await base.ExecuteAsync(context) == 1)
+        {
+            return 0;
+        }
         
         string firstName = AnsiConsole.Prompt(new TextPrompt<string>($"[{ColorConstants.REGULAR}]{StylisticConstants.TAB}Enter first name:[/]"));
         string lastName = AnsiConsole.Prompt(new TextPrompt<string>($"[{ColorConstants.REGULAR}]{StylisticConstants.TAB}Enter last name:[/]"));

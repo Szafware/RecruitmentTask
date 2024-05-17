@@ -14,12 +14,36 @@ internal class ApiConnectionService : IApiConnectionService
 {
     private readonly Uri _baseUri = new Uri("https://localhost:7213/");
     private readonly string _peopleUri = "people";
+    private readonly string _availabilityUri = "availability";
+
+    private readonly int _availabilityTimeoutMilliseconds = 750;
 
     private readonly RestClient _restClient;
 
     public ApiConnectionService()
     {
         _restClient = new RestClient(_baseUri);
+    }
+
+    public async Task<bool> IsApiAvailableAsync()
+    {
+        var restRequest = new RestRequest(_availabilityUri, Method.Head)
+        {
+            Timeout = _availabilityTimeoutMilliseconds
+        };
+
+        try
+        {
+            var restResponse = await _restClient.ExecuteAsync(restRequest);
+
+            bool wasApiCallSuccessful = restResponse.IsSuccessful;
+
+            return wasApiCallSuccessful;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     public async Task<IEnumerable<PersonResponse>> GetAllPeopleAsync()
@@ -59,7 +83,7 @@ internal class ApiConnectionService : IApiConnectionService
         return apiResponse;
     }
 
-    public async Task<ApiResponse> RemovePerson(Guid personId)
+    public async Task<ApiResponse> RemovePersonAsync(Guid personId)
     {
         var personToRemoveUri = new Uri(_baseUri, $"{_peopleUri}/{personId}");
 

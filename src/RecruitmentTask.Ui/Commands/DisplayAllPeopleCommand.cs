@@ -1,4 +1,5 @@
 ﻿using RecruitmentTask.Ui.ApiConnection;
+using RecruitmentTask.Ui.Commands.Base;
 using RecruitmentTask.Ui.Constants;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -7,18 +8,20 @@ using System.Threading.Tasks;
 
 namespace RecruitmentTask.Ui.Commands;
 
-internal class DisplayAllPeopleCommand : AsyncCommand
+internal class DisplayAllPeopleCommand : ApiCommandBase
 {
-    private readonly IApiConnectionService _apiConnectionService;
-
-    public DisplayAllPeopleCommand(IApiConnectionService apiConnectionService)
+    public DisplayAllPeopleCommand(IApiConnectionService apiConnectionService) : base(apiConnectionService)
     {
-        _apiConnectionService = apiConnectionService;
     }
 
     public override async Task<int> ExecuteAsync(CommandContext context)
     {
         AnsiConsole.WriteLine();
+
+        if (await base.ExecuteAsync(context) == 1)
+        {
+            return 0;
+        }
 
         var peopleResponses = await _apiConnectionService.GetAllPeopleAsync();
 

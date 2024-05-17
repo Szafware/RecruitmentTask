@@ -1,14 +1,18 @@
 ﻿using RecruitmentTask.Application.People.GetAllPeople;
+using RecruitmentTask.Ui.ApiConnection;
 using RecruitmentTask.Ui.Constants;
 using Spectre.Console;
-using Spectre.Console.Cli;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace RecruitmentTask.Ui.Commands;
+namespace RecruitmentTask.Ui.Commands.Base;
 
-internal abstract class PersonCommandBase : AsyncCommand
+internal abstract class PersonCommandBase : ApiCommandBase
 {
+    protected PersonCommandBase(IApiConnectionService apiConnectionService) : base(apiConnectionService)
+    {
+    }
+
     protected PersonResponse SelectPersonByNumber(IEnumerable<PersonResponse> peopleResponses)
     {
         var table = new Table()

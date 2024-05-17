@@ -4,21 +4,24 @@ using Spectre.Console;
 using RecruitmentTask.Ui.ApiConnection;
 using System.Linq;
 using RecruitmentTask.Ui.Constants;
+using RecruitmentTask.Ui.Commands.Base;
 
 namespace RecruitmentTask.Ui.Commands;
 
 internal class RemovePersonCommand : PersonCommandBase
 {
-    private readonly IApiConnectionService _apiConnectionService;
-
-    public RemovePersonCommand(IApiConnectionService apiConnectionService)
+    public RemovePersonCommand(IApiConnectionService apiConnectionService) : base(apiConnectionService)
     {
-        _apiConnectionService = apiConnectionService;
     }
 
     public override async Task<int> ExecuteAsync(CommandContext context)
     {
         AnsiConsole.WriteLine();
+
+        if (await base.ExecuteAsync(context) == 1)
+        {
+            return 0;
+        }
 
         var peopleResponses = await _apiConnectionService.GetAllPeopleAsync();
 
@@ -26,7 +29,7 @@ internal class RemovePersonCommand : PersonCommandBase
         {
             var personToRemove = SelectPersonByNumber(peopleResponses);
 
-            var apiResponse = await _apiConnectionService.RemovePerson(personToRemove.Id);
+            var apiResponse = await _apiConnectionService.RemovePersonAsync(personToRemove.Id);
 
             AnsiConsole.WriteLine();
 

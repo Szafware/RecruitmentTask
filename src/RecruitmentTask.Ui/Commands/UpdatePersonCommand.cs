@@ -6,21 +6,24 @@ using RecruitmentTask.Ui.Constants;
 using Spectre.Console;
 using System.Linq;
 using RecruitmentTask.Ui.Helpers;
+using RecruitmentTask.Ui.Commands.Base;
 
 namespace RecruitmentTask.Ui.Commands;
 
 internal class UpdatePersonCommand : PersonCommandBase
 {
-    private readonly IApiConnectionService _apiConnectionService;
-
-    public UpdatePersonCommand(IApiConnectionService apiConnectionService)
+    public UpdatePersonCommand(IApiConnectionService apiConnectionService) : base(apiConnectionService)
     {
-        _apiConnectionService = apiConnectionService;
     }
 
     public override async Task<int> ExecuteAsync(CommandContext context)
     {
         AnsiConsole.WriteLine();
+
+        if (await base.ExecuteAsync(context) == 1)
+        {
+            return 0;
+        }
 
         var peopleResponses = await _apiConnectionService.GetAllPeopleAsync();
 
